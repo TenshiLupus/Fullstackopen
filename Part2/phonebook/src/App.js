@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Names from './components/PersonList/PersonList'
 import Form from './components/Form/Form'
+import personService from './services/personService';
+
+
+//within the lifetime of an application we are handling 2 data structures one persistent, and one volatile
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [number, setNumber] = useState('')
   const [filterBy, setFilterBy] = useState('')
@@ -17,11 +16,14 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+
+      personService.getAll().then(initialPersons => {
+        console.log(initialPersons)
+        setPersons(initialPersons)
+        setFilteredPersons(initialPersons)
+      })
+      .catch(error => {
+        alert("could not retrieve the persons")
       })
   }, [])
 
@@ -44,7 +46,9 @@ const App = () => {
 
     const found = persons.find(person => !person.name === newName)
 
-    found ? alert(`${newName} already exists in the list`) :  setPersons(persons.concat(newPerson));
+
+
+    found ? alert(`${newName} already exists in the list`) :  personService.create(newPerson).then(returnedPerson => setFilteredPersons(persons.concat(returnedPerson)));
 
     setNewName('')
     setNumber('')
