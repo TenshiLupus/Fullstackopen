@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import CountriesService from './service/CountriesService';
-import weatherService from './service/weatherService';
 
 import CountryForm from './components/CountryForm/CountryForm';
 import CountryList from './components/CountryList/CountryList';
@@ -14,16 +13,12 @@ const App = () => {
   const [countries, setCountries] = useState([])
   // const [countryView, setCountryView] = useState(null)
   const [singleView, setSingleView] = useState(null)
-  const [weatherData, setWeatherData] = useState({})
-  const [countryWeather, setCountryWeather] = useState(null)
+  const [weatherData, setWeatherData] = useState(null)
 
   useEffect(() => {
     CountriesService.getAll().then(response => {setCountries(response)})
-    if(countryWeather){
-      setWeatherData(weatherService.getWeatherData(countryWeather))
-    }
+    
   },[])
-  console.log("Country weather", countryWeather)
 
   const changeHandler = (event) => {
     const currentSearch = event.target.value
@@ -43,7 +38,7 @@ const App = () => {
     return (
       <div className="App">
       <CountryForm searchQuery={filterBy} searchHandler={changeHandler}/>
-      <CountryList countryList={countriestoShow} viewHandler={viewHandler} singleView={singleView} setWeather={setCountryWeather} weather={weatherData}/>
+      <CountryList countryList={countriestoShow} viewHandler={viewHandler} singleView={singleView} setWeather={setWeatherData} weather={weatherData}/>
     </div>
   );
 }
