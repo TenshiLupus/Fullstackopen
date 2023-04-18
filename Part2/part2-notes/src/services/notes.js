@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/notes'
+const baseUrl = '/api/notes'
 
 //these functions will still return promises as response to other promises, "then" will return a promise from another "then" promise
 
