@@ -1,13 +1,20 @@
 import Person from "../Person/Person"
 
-const Names = ({persons}) => {
+const Names = ({persons, buttonHandler}) => {
   
     return (
       <>
-      <h2>Numbers</h2>
-      <ul>
-          {persons.map(person => <Person key={person.name} name={person.name} number={person.number}/>)}
-      </ul>
+        <h2>Numbers</h2>
+        <ul>
+            {
+            persons.map(person => {
+              console.log(persons);
+              console.log(person.id);
+              return (
+                <Person key={person.id} person={person} buttonHandler={buttonHandler}/>
+            )})
+          }
+        </ul>
       </>
     )
   }
