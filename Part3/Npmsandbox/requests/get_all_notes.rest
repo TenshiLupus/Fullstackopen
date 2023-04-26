@@ -4,6 +4,8 @@ POST http://localhost:3001/api/notes/ HTTP/1.1
 content-type: application/json
 
 {
-    "name": "sample",
-    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+    "content" : "TESTING TESTING",
+    "important" : false
 }
+###
+DELETE http://localhost:3001/api/notes/64413fbda718df74499a3343
