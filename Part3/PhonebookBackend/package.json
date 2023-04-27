@@ -6,17 +6,21 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:ui": "@powershell Remove-Item -Recurse -Force build && cd ../../Part2/phonebook/ && npm run build && @powershell Copy-Item build -Recurse ../../Part3/PhonebookBackend",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^7.0.4",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.39.0",
     "nodemon": "^2.0.22"
   }
 }

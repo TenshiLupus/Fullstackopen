@@ -1,125 +1,132 @@
+/* eslint-disable linebreak-style */
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+
 const app = express()
+const Person = require('./models/person')
 
-app.use(express.json())
-app.use(cors())
-app.use(express.static('build'))
-
-morgan.token('body', (request,response) => {
-    return JSON.stringify(request.body)
+// eslint-disable-next-line no-unused-vars
+morgan.token('body', (request, response) => {
+  return JSON.stringify(request.body)
 })
-
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
-const getRandomInt = (min, max) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-}
 
 const requestLogger = (request, response, next) => {
-    console.log("Method", request.method);
-    console.log("Path", request.path);
-    console.log("Body", request.body);
-    console.log("---");
-    next()
+  console.log('Method', request.method)
+  console.log('Path', request.path)
+  console.log('Body', request.body)
+  console.log('---')
+  next()
 }
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).json({ error: 'unknown endpoint' })
+}
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if(error.name === 'CastError'){
+    return response.status(400).send({ error: 'malformatted id' })
+  }else if(error.name === 'ValidationError'){
+    return response.status(400).json({ error: error.message })
+  }
+
+  next(error)
+}
+
+app.use(express.static('build'))
+app.use(express.json())
+app.use(cors())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(requestLogger)
 
-let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
-app.post("/api/persons", (request, response) => {
-    const personToAdd = request.body
+app.post('/api/persons', (request, response, next) => {
+  const { name, number } = request.body
 
 
-    if(!personToAdd.number || !personToAdd.name){
-        return response.status(400).json({
-            error: "one or more content is missing"
-        })
-    }
+  if(!number || !name){
+    return response.status(400).json({
+      error: 'one or more content is missing'
+    })
+  }
 
-    if(persons.find(person => person.name === personToAdd.name)){
-        return response.status(400).json({
-            error: "This user already exists in the registry"
-        })
-    }
+  const person = new Person({
+    name,
+    number
+  })
 
-    const person = {
-        id: getRandomInt(1,2000),
-        name: personToAdd.name,
-        number: personToAdd.number
-    }
-
-    persons = persons.concat(person)
+  person.save().then( person => {
     response.json(person)
+  }).catch(error => next(error))
 })
 
-app.get("/", (request,response) => {
-    response.send('<h1>hello World from phonebook backend</h1>');
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons => {
+    response.status(200).json(persons)
+  })
 })
 
-app.get("/api/persons", (request, response) => {
-    response.send(persons)
-})
+app.get('/api/persons/:id', (request, response, next) => {
 
-app.get("/api/persons/:id", (request, response) => {
-    const id = Number(request.params.id)
-    const foundPerson = persons.find(person => person.id === id)
-
-    if(!foundPerson){
-        return response.status(404).json({
-            error: "the persons with the given id is missing from the list"
-        })
+  Person.findById(request.params.id).then(person => {
+    if(person){
+      response.status(200).json(person)
+    } else{
+      response.status(404).end()
     }
-    
-    response.send(foundPerson)
+  })
+    .catch(error => next(error))
+
+  // if(!foundPerson){
+  //     return response.status(404).json({
+  //         error: "the persons with the given id is missing from the list"
+  //     })
+  // }
+
+  // response.send(foundPerson)
 })
 
-app.get("/info", (request, response) => {
-    response.send(`
+app.get('/info', (request, response, next) => {
+
+  Person.find({}).then(persons => {
+    response.status(200).send(`
         <p>Phonebook has info for ${persons.length} people</p>
         ${Date()}
     `)
+  })
+    .catch(error => next(error))
+
 })
 
-app.delete("/api/persons/:id", (request, response) => {
-    const id = Number(request.params.id)
-    const filteredPersons = persons.filter(person => person.id !== id)
-    persons = filteredPersons
+app.put('/api/persons/:id', (request, response, next) => {
+  const person = request.body
+  const personId = request.params.id
 
-    response.status(204).json({
-        error: "item has been deleted"
-    })
-})
-
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+  const updatedPerson = {
+    name: person.name,
+    number: person.number
   }
-  
-  app.use(unknownEndpoint)
+
+  Person.findByIdAndUpdate(personId, updatedPerson, { new: true })
+    .then(updatedPerson => {
+      response.status(204).json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
+app.delete('/api/persons/:id', (request, response, next) => {
+
+  Person.findByIdAndDelete(request.params.id).then(response => {
+    response.status(204).json({
+      error: 'item has been deleted'
+    })
+  }).catch(error => next(error))
+})
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
