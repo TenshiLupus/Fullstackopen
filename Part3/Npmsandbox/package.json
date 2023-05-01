@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "@powershell Remove-Item -Recurse -Force build && cd ../../Part2/part2-notes/ && npm run build && @powershell Copy-Item build -Recurse ../../Part3/Npmsandbox",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
-    "logs:prod": "fly logs"
+    "logs:prod": "fly logs",
+    "test": "jest --verbose",
+    "lint": "eslint ."
   },
   "author": "angel",
   "license": "ISC",
@@ -21,6 +22,12 @@
     "mongoose": "^7.0.4"
   },
   "devDependencies": {
+    "eslint": "^8.39.0",
+    "eslint-plugin-react": "^7.32.2",
+    "jest": "^29.5.0",
     "nodemon": "^2.0.22"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
