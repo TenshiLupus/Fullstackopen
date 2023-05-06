@@ -1,4 +1,16 @@
+const mongoose = require('mongoose')
+const supertest = require('supertest')
+//imports the existing express application
+const app = require('../app')
+
+const api = supertest(app)
 const listHelper = require('../utils/list_helper')
+
+test('Requests all the blogs from the database', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body)
+})
 
 test('dummy returns one', () => {
   const blogs = []

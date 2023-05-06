@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import Names from "./components/PersonList/PersonList";
 import Form from "./components/Form/Form";
@@ -8,7 +7,7 @@ import Notification from "./components/Notification/Notification";
 import Footer from "./components/Footer/Footer";
 
 //within the lifetime of an application we are handling 2 data structures one persistent, and one volatile
-const notficationTypes = {
+const notificationTypes = {
   success: "success",
   error: "error",
   neutral: "neutral",
@@ -20,7 +19,7 @@ const App = () => {
   const [number, setNumber] = useState("");
   const [filterBy, setFilterBy] = useState("");
   const [notificationMessage, setNotificationMessage] = useState(null)
-  const [notificationType, setNotificationType] = useState(notficationTypes.neutral)
+  const [notificationType, setNotificationType] = useState(notificationTypes.neutral)
   
   // const [filteredPersons, setFilteredPersons] = useState(persons)
 
@@ -30,8 +29,6 @@ const App = () => {
     personService
       .getAll()
       .then((initialPersons) => {
-
-        console.log("Getting persons", initialPersons);
         setPersons(initialPersons);
       })
       .catch((error) => {
@@ -54,7 +51,7 @@ const App = () => {
       number: number,
     };
 
-    const found = persons.find((person) => person.name === newName);
+    const found = persons.find((person) => person.name.toLowerCase() === newName.toLowerCase());
 
     const updateUser = (id) => {
         if(window.confirm("this person already exists overwrite existing number?")){
@@ -68,14 +65,14 @@ const App = () => {
                     setNotificationMessage(
                       `User '${returnedPerson.name}' has been updated in server`
                     )
-                    setNotificationType(notficationTypes.success)
+                    setNotificationType(notificationTypes.success)
                     setTimeout(() => {
                       setNotificationMessage(null)
                     }, 5000)
                     
                 }).catch(e => {
                     setNotificationMessage(`User '${updatedPerson.name}' has already been removed from server`)
-                    setNotificationType(notficationTypes.error)
+                    setNotificationType(notificationTypes.error)
                     setTimeout(() => {
                       setNotificationMessage(null)
                     }, 5000)
@@ -93,11 +90,16 @@ const App = () => {
             setNotificationMessage(
               `User '${returnedPerson.name}' has been added to the server`
             )
-            setNotificationType(notficationTypes.success)
+            setNotificationType(notificationTypes.success)
             setTimeout(() => {
               setNotificationMessage(null)
             }, 5000)
-          });
+          }).catch(error => {
+            console.log(error)
+            console.log(error.response.data.error)
+            setNotificationMessage(error.response.data.error)
+            setNotificationType(notificationTypes.error)
+          })
     }
 
     found ? updateUser(found.id) : createUser(newPerson)

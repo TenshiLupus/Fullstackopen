@@ -8,7 +8,6 @@ const Names = ({persons, buttonHandler}) => {
         <ul>
             {
             persons.map(person => {
-              console.log(persons);
               console.log(person.id);
               return (
                 <Person key={person.id} person={person} buttonHandler={buttonHandler}/>
