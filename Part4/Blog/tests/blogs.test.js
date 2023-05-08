@@ -2,177 +2,111 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 //imports the existing express application
 const app = require('../app')
-
 const api = supertest(app)
+const Blog = require('../models/blog')
 const listHelper = require('../utils/list_helper')
+const testHelper = require('./testHelper')
 
-test('Requests all the blogs from the database', async () => {
-  const response = await api.get('/api/blogs')
-
-  expect(response.body)
+//Promise.all() will execute the promises parallely, but if wanted in sequence, a normal for loop can be utilized
+beforeEach(async () => {
+	await Blog.deleteMany({})
+	const blogObjects = testHelper.initialBlogs.map(blog => new Blog(blog))
+	const promiseArray = blogObjects.map(note => note.save())
+	const results = await Promise.all(promiseArray)
 })
 
 test('dummy returns one', () => {
   const blogs = []
-
   const result = listHelper.dummy(blogs)
   expect(result).toBe(1)
 })
 
 describe('total likes', () => {
-  const blogs = [
-    {
-      _id: "5a422a851b54a676234d17f7",
-      title: "React patterns",
-      author: "Michael Chan",
-      url: "https://reactpatterns.com/",
-      likes: 7,
-      __v: 0
-    },
-    {
-      _id: "5a422aa71b54a676234d17f8",
-      title: "Go To Statement Considered Harmful",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-      likes: 5,
-      __v: 0
-    },
-    {
-      _id: "5a422b3a1b54a676234d17f9",
-      title: "Canonical string reduction",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-      likes: 12,
-      __v: 0
-    },
-    {
-      _id: "5a422b891b54a676234d17fa",
-      title: "First class tests",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-      likes: 10,
-      __v: 0
-    },
-    {
-      _id: "5a422ba71b54a676234d17fb",
-      title: "TDD harms architecture",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-      likes: 0,
-      __v: 0
-    },
-    {
-      _id: "5a422bc61b54a676234d17fc",
-      title: "Type wars",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-      likes: 2,
-      __v: 0
-    }  
-  ]
-  
-  const listWithOneBlog = [
-    {
-      _id: '5a422aa71b54a676234d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    }
-  ]
 
   test('of emptylist is zero', () => {
     const blogList = []
-
     expect(listHelper.totalLikes(blogList)).toBe(0)
   })
 
   test('when list has only one blog equals the likes of that', () => {
-    expect(listHelper.totalLikes(listWithOneBlog)).toBe(5)
+    expect(listHelper.totalLikes(testHelper.listWithOneBlog)).toBe(5)
   })
 
   test('of a bigger list is calculated right', () => {
-    expect(listHelper.totalLikes(blogs)).toBe(36)
+    expect(listHelper.totalLikes(testHelper.initialBlogs)).toBe(36)
   })
-
-  
 })
 
 describe('Blog that', () => {
-  
-  const blogs = [
-    {
-      _id: "5a422a851b54a676234d17f7",
-      title: "React patterns",
-      author: "Michael Chan",
-      url: "https://reactpatterns.com/",
-      likes: 7,
-      __v: 0
-    },
-    {
-      _id: "5a422aa71b54a676234d17f8",
-      title: "Go To Statement Considered Harmful",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-      likes: 5,
-      __v: 0
-    },
-    {
-      _id: "5a422b3a1b54a676234d17f9",
-      title: "Canonical string reduction",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-      likes: 12,
-      __v: 0
-    },
-    {
-      _id: "5a422b891b54a676234d17fa",
-      title: "First class tests",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-      likes: 10,
-      __v: 0
-    },
-    {
-      _id: "5a422ba71b54a676234d17fb",
-      title: "TDD harms architecture",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-      likes: 0,
-      __v: 0
-    },
-    {
-      _id: "5a422bc61b54a676234d17fc",
-      title: "Type wars",
-      author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-      likes: 2,
-      __v: 0
-    }  
-  ]
-  
-  const listWithOneBlog = [
-    {
-      _id: '5a422aa71b54a676234d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    }
-  ]
 
   test('has the highest amount of like', () => {
-    expect(listHelper.favoriteBlog(blogs)).toEqual(blogs[2])
+    expect(listHelper.favoriteBlog(testHelper.initialBlogs)).toEqual(testHelper.initialBlogs[2])
   })
 
   test('with the most frequent author', () => {
-    expect(listHelper.highestAuthorBlogs(blogs).author).toBe("Robert C. Martin")
+    expect(listHelper.highestAuthorBlogs(testHelper.initialBlogs).author).toBe("Robert C. Martin")
   })
 
   test('has author with most likes in general', () => {
-    expect(listHelper.mostLikes(blogs).author).toBe("Edsger W. Dijkstra")
+    expect(listHelper.mostLikes(testHelper.initialBlogs).author).toBe("Edsger W. Dijkstra")
   })
 
 })
+
+test('Requests all the blogs from the database', async () => {
+	const response = await api.get('/api/blogs')
+	expect(response.body).toHaveLength(testHelper.initialBlogs.length)
+})
+  
+test('identifier is properly formatted', async () => {
+	const testBlog = await new Blog(testHelper.testBlog).save()
+	expect(testBlog.id).toBeDefined() 
+})
+  
+test('create a new blog in database', async () => {
+	const blogToAdd = new Blog(testHelper.testBlog)
+	await blogToAdd.save()
+	const storedBlogs = await api.get('/api/blogs')
+	expect(storedBlogs.body).toHaveLength(testHelper.initialBlogs.length + 1)
+})
+  
+test('fills likes with default value', async () => {
+	
+	const incompleteBlog = {
+		title: "van",
+		author: "jhon",
+		url: "ssjsjs@sjsjsjs.com"
+	}
+
+	const incompleteReturn = await api.post('/api/blogs').send(incompleteBlog).expect(201).expect('Content-Type', /application\/json/)
+	expect(incompleteReturn.body.likes).toBeDefined()
+})
+
+test('bad request', async () => {
+	const missingFieldsBlog = {
+		url: "asdfa",
+		likes: 5
+	}
+
+	const incompleteReturn = await api.post('/api/blogs').send(missingFieldsBlog).expect(400)
+
+})
+
+test('an item has been deleted with the given id', async () => {
+	const initialBlogs = await Blog.find({})
+    initialBlogs.map(b => b.toJSON())
+	const blogInDatabase = initialBlogs[0]
+
+	await api.delete(`/api/blogs/${blogInDatabase.id}`).expect(204)
+
+	const blogs = await Blog.find({})
+    blogs.map(b => b.toJSON())
+
+	expect(blogs).toHaveLength(initialBlogs.length - 1)
+
+})
+
+afterAll(async () => {
+	console.log('close connection to the database')
+	await mongoose.connection.close()
+  })

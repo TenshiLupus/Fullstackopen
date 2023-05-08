@@ -4,7 +4,6 @@ const dummy = (blogs) => {
 
 const totalLikes = (blogs) => {
 
-
     const amount = blogs.length === 0 ? 0 : blogs.reduce((acc, cv) => acc + cv.likes, 0)
 
     return amount
@@ -36,10 +35,8 @@ const highestAuthorBlogs = (blogs) => {
 
     blogs.forEach(blog => {
         let currentValue = authorMap.get(blog.author)
-        console.log("Author: ",blog.author, " with value: ", currentValue)
         if(currentValue === undefined){
             authorMap.set(blog.author, 1)
-            console.log("HOPPING OVER AFTER SET")
             return
 
         }
@@ -48,9 +45,8 @@ const highestAuthorBlogs = (blogs) => {
         if(currentValue > highestAuthor.blogs){
             highestAuthor.author = blog.author
             highestAuthor.blogs = currentValue
-            console.log("AUTHOR HAS BEEN SET")
+
         }
-        console.log("ITERATING", highestAuthor)
     })
     return highestAuthor
 }
@@ -61,10 +57,8 @@ const mostLikes = (blogs) => {
 
     blogs.forEach(blog => {
         let currentValue = authorMap.get(blog.author)
-        console.log("Author: ",blog.author, " with value: ", currentValue)
         if(currentValue === undefined){
             authorMap.set(blog.author, blog.likes)
-            console.log("HOPPING OVER AFTER SET")
             return
 
         }
@@ -73,9 +67,9 @@ const mostLikes = (blogs) => {
         if(currentValue > highestAuthor.likes){
             highestAuthor.author = blog.author
             highestAuthor.likes = currentValue
-            console.log("AUTHOR HAS BEEN SET")
+   
         }
-        console.log("ITERATING", highestAuthor)
+
     })
     return highestAuthor
 }
