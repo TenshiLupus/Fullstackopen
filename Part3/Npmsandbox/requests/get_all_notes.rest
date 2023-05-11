@@ -9,3 +9,18 @@ content-type: application/json
 }
 ###
 DELETE http://localhost:3001/api/notes/64413fbda718df74499a3343
+
+###
+
+POST http://localhost:3001/api/users/ 
+Content-Type: application/json
+
+{
+    "username": "root",
+    "name": "Superuser",
+    "password": "salainen"
+}
+
+###
+
+GET http://localhost:3001/api/users/
