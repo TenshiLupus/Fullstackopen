@@ -11,3 +11,19 @@ content-type: application/json
 ###
 
 GET http://localhost:3003/
+
+###
+
+POST http://localhost:3003/api/users 
+Content-Type: application/json
+
+{
+    "username": "wira",
+    "name": "Angel lluvia",
+    "password": "Microcast-100"
+
+}
+
+###
+
+GET http://localhost:3003/api/users
