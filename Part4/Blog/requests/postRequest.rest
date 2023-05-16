@@ -1,9 +1,9 @@
-POST http://localhost:3003/ HTTP/1.1 
+POST http://localhost:3003/api/blogs HTTP/1.1 
 content-type: application/json
 
 {
-    "title": "Laconian pot",
-    "author": "tol",
+    "title": "bqwrtwertewertrwegrt",
+    "author": "mcacacs",
     "url": "tcvacaca",
     "likes": 7
 }
@@ -18,12 +18,46 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-    "username": "wira",
-    "name": "Angel lluvia",
-    "password": "Microcast-100"
+    "username": "Calagan",
+    "name": "Angel POPL carnad",
+    "password": "Microcast-500"
 
 }
 
 ###
 
 GET http://localhost:3003/api/users
+
+###
+
+GET http://localhost:3003/api/blogs
+
+###
+
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "Calagan",
+    "password": "Microcast-500"
+}
+
+###
+
+//Never use uppercase for defining the authorization header
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNhbGFnYW4iLCJpZCI6IjY0NjM4NzJkMzgxNmJjNWQ5YjVkNzAyNCIsImlhdCI6MTY4NDI0NDI4MX0.irnZe37CVYmL46SNjqdHuDy3e5Q5KAgDJpCYv0zTS9E
+
+{
+    "title": "Blog to delete",
+    "author": "delete works?",
+    "url": "blalbalbalbalbalblal",
+    "likes": 6
+}
+
+###
+
+DELETE http://localhost:3003/api/blogs/646389d17d8c4ecabf05927c
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNhbGFnYW4iLCJpZCI6IjY0NjM4NzJkMzgxNmJjNWQ5YjVkNzAyNCIsImlhdCI6MTY4NDI0NDI4MX0.irnZe37CVYmL46SNjqdHuDy3e5Q5KAgDJpCYv0zTS9E
