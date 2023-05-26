@@ -9,7 +9,7 @@ const loginForm = ({handleLogin, handlePasswordChange, handleUsernameChange, pas
           type="text"
           value={username}
           name="Username"
-          onChange={() => handleUsernameChange()}
+          onChange={(event) => handleUsernameChange(event)}
         />
       </div>
       <div>
@@ -18,7 +18,7 @@ const loginForm = ({handleLogin, handlePasswordChange, handleUsernameChange, pas
           type="password"
           value={password}
           name="Password"
-          onChange={() => handlePasswordChange()}
+          onChange={(event) => handlePasswordChange(event)}
         />
       </div>
       <button type="submit">login</button>
