@@ -19,8 +19,9 @@ const BlogsContainer = ({ blogs, setBlogs, user, setUser, createBlog, blogFormRe
       <p>Create new</p>
       <BlogForm createBlog={createBlog}/>
     </Togglable>
-
-    {blogs.map((blog) => (
+    
+    {/*Since we want to sort the items in descending order, the likes value of the second element needs to remain positive after subtraction to assert that the first value was smaller i.e b>a [a,b]*/}
+    {blogs.sort((a,b) => b.likes-a.likes).map((blog) => (
       <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
     ))}
   </div>)
