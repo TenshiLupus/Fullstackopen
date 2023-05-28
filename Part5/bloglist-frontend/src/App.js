@@ -24,6 +24,7 @@ const App = () => {
     notificationTypes.neutral
   );
 
+  //The page rerenders whenever it detects that blogs has been changed, even after the first render
   useEffect(() => {
     const retrieveBlogs = async () => {
       const blogs = await blogService.getAll();
@@ -31,7 +32,7 @@ const App = () => {
     };
 
     retrieveBlogs().catch(console.error);
-  }, []);
+  }, [user]);
 
   //if an existing users exists in localstorage, it should be set as the current user
   useEffect(() => {
@@ -55,8 +56,15 @@ const App = () => {
   const createBlog = async (blogObject) => {
     try {
 		blogFormRef.current.toggleVisibility()
-      	const createdBlog = await blogService.create(blogObject);
-      	setBlogs(blogs.concat(createdBlog));
+      	//Heuristic solution to passing user name for the blog to render, consider refactoring
+        const createdBlog = await blogService.create(blogObject);
+        const createdBlogWithUser = {
+          ...createdBlog, user
+        }
+        
+        const updatedBlogs = blogs.concat(createdBlogWithUser)
+        console.log("UPDATED BLOGS AFTER CREATION: ",updatedBlogs);
+      	setBlogs(updatedBlogs);
       	createNotification(
         `A new blog ${createdBlog.title} by ${createdBlog.author} was successfully created`,
         notificationTypes.success
@@ -126,10 +134,12 @@ const App = () => {
       ) : (
         <BlogsContainer
           blogs={blogs}
+          setBlogs={setBlogs}
           user={user}
           setUser={setUser}
           createBlog={createBlog}
           blogFormRef={blogFormRef}
+          
         />
       )}
     </div>

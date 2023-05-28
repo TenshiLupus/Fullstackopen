@@ -5,7 +5,7 @@ import LogoutButton from "../Buttons/LogoutButton/LogoutButton";
 import BlogForm from "../BlogForm/BlogForm";
 import Togglable from "../Toggable/Togglable";
 
-const BlogsContainer = ({ blogs, user, setUser, createBlog, blogFormRef}) => {
+const BlogsContainer = ({ blogs, setBlogs, user, setUser, createBlog, blogFormRef}) => {
 
   
   
@@ -21,7 +21,7 @@ const BlogsContainer = ({ blogs, user, setUser, createBlog, blogFormRef}) => {
     </Togglable>
 
     {blogs.map((blog) => (
-      <Blog key={blog.id} blog={blog} />
+      <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
     ))}
   </div>)
 

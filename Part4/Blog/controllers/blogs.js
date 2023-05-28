@@ -81,11 +81,13 @@ blogRouter.delete('/:id', async (request, response) => {
 	response.status(204).end()
 })
 
+//trying to update the document wiht more fields than expected allegedly cast a castToObject exeption, consider investigating
 blogRouter.put('/:id', async (request, response) => {
-	const body = request.body
+	const {author, title, url, likes} = request.body
 
-	const blog = {...body}
+	const blog = {author, title, url, likes}
 
+  //We are not replacing the entire document, only updating the fields that are specified in the passed in object
 	const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true})
 
 	response.json(updatedBlog)
