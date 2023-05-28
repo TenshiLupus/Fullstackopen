@@ -5,6 +5,16 @@ const Blog = ({ blog, setBlogs, blogs}) => {
   const [detailed, setDetailMode] = useState(false);
   const buttonText = !detailed ? "detailed" : "Simple";
 
+	const deleteBlog = async () => {
+		try{
+			await blogService.remove(blog.id)	
+			const blogsWithoutCurrent = blogs.filter(blogInList => blogInList.id !== blog.id)
+      setBlogs(blogsWithoutCurrent)
+		}catch(error) {
+			console.log(error)
+		}
+	}
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -41,6 +51,11 @@ const Blog = ({ blog, setBlogs, blogs}) => {
               {blog.likes} <button onClick={() => {handleLikeIncrease()}}>Like</button>
             </p>
             <p>{blog.user.name}</p>
+            <button onClick={() => {
+              if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
+                deleteBlog()
+              }
+            }}>Remove blog</button>
           </div>
         )}
         <button

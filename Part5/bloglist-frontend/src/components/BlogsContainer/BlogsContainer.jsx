@@ -7,8 +7,6 @@ import Togglable from "../Toggable/Togglable";
 
 const BlogsContainer = ({ blogs, setBlogs, user, setUser, createBlog, blogFormRef}) => {
 
-  
-  
   return (<div>
     {console.log(user)}
     <h2>blogs</h2>
