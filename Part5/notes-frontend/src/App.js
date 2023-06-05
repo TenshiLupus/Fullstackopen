@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react"
 import noteService from "./services/notes"
 import loginService from "./services/login"
 
-import Note from "./components/note/Note"
+import Note from "./components/Note/Note"
 import Notification from "./components/Notification/Notification"
 import LoginForm from "./components/LoginForm/LoginForm"
 import NoteForm from "./components/NotesForm/NoteForm"
