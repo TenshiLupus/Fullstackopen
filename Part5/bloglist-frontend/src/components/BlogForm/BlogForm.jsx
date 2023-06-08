@@ -40,10 +40,10 @@ const BlogForm = ({ createBlog }) => {
 			<label htmlFor="author">Author: </label>
 			<input id="author" value={author} onChange={event => handleAuthorChange(event)}/>
 			<br/>
-			<label htmlFor="URL">URL: </label>
-			<input id="URL" value={url} onChange={event => handleUrlChange(event)}/>
+			<label htmlFor="url">URL: </label>
+			<input id="url" value={url} onChange={event => handleUrlChange(event)}/>
 			<br/>
-			<button type="submit">Create</button>
+			<button id="submit-button" type="submit">Create</button>
 		</form>
 	)
 }
