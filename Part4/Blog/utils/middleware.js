@@ -29,7 +29,8 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const tokenExtractor = (request, response, next) => {
-		const authorization = request.get('authorization')
+		const authorization = request.get('Authorization')
+		console.log("Authorization exists")
 		if (authorization && authorization.startsWith('bearer ')) {
 		  request.token = authorization.replace('bearer ', '')
 		  console.log('Token has been added to request')

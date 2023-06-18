@@ -36,12 +36,15 @@ const Blog = ({ blog, setBlogs, blogs, likeIncreaseHandler }) => {
 						<a className="blog-url" href={blog.url}>{blog.url}</a>
 						<p className="blog-author">{blog.author}</p>
 						<p className="blog-likes">{blog.likes} <button className="like-increase" onClick={() => {likeIncreaseHandler(blog)}}>Like</button></p>
-						<p>{blog.user.name}</p>
-						<button onClick={() => {
-							if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
-								deleteBlog()
-							}
-						}}>Remove blog</button>
+						<p className="blog-username">{blog.user.username}</p>
+						{
+							JSON.parse(window.localStorage.getItem("loggedUserJSON")).username === blog.user.username &&
+							<button className="remove-blog-button" onClick={() => {
+								if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
+									deleteBlog()
+								}
+							}}>Remove blog</button>
+						}
 					</div>
 				)}
 				<button className="detailMode"

@@ -1,7 +1,15 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require('../models/user');
+const jwt = require("jsonwebtoken")
 
+const getTokenFrom = request => {
+  const authorization = request.get("authorization")
+  if(authorization && authorization.startsWith("bearer ")) {
+    return authorization.replace("bearer ", "")
+  }
+  return null
+}
 
 blogRouter.get("/", async (request, response) => {
   
@@ -12,8 +20,8 @@ blogRouter.get("/", async (request, response) => {
 
 blogRouter.post("/", async (request, response) => {
   const body = request.body
-  const requestUser = request.user
-  
+
+  const requestUser = jwt.verify(getTokenFrom(request), process.env.SECRET)
   if(!requestUser.id){
     return response.status(401).json({error: 'token invalid'})
   }
@@ -24,15 +32,10 @@ blogRouter.post("/", async (request, response) => {
   if(body.author === undefined || body.title === undefined){
     return response.status(400).end()
   }
+  
   if(body.likes === undefined){
     request.body.likes = 0
   }
-
-  // const usersInDatabase = await requestHelper.usersInDb()
-  // const randomUserIndex = requestHelper.randomIndex(usersInDatabase)
-  // const user = usersInDatabase[randomUserIndex]
-  // console.log(usersInDatabase)
-  // console.log(user)
 
   const newBlog = {
     ...body,
@@ -53,11 +56,16 @@ blogRouter.post("/", async (request, response) => {
 });
 
 blogRouter.delete('/:id', async (request, response) => {
-  const user = request.user
+  const body = request.body
+
+  const user = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if(!user.id){
+    return response.status(401).json({error: 'token invalid'})
+  }
   console.log("THIS IS THE USER IN THE REQUEST", user)
   const blogToDelete = request.params.id
   
-  const userId = user._id.toString()
+  const userId = user.id.toString()
   console.log('THIS IS THE ID OF THE USER', typeof userId)
 
   if(!user){

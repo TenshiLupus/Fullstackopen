@@ -17,7 +17,8 @@
     "test": "react-scripts test",
     "testd": "cross-env CI=true npm test -- --coverage",
     "eject": "react-scripts eject",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "cypress:open": "cypress open"
   },
   "jest": {
     "transform": {
@@ -51,6 +52,8 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "babel-jest": "^29.5.0",
+    "cypress": "^12.14.0",
+    "eslint-plugin-cypress": "^2.13.3",
     "eslint-plugin-jest": "^27.2.1",
     "jest": "^27.5.1",
     "react-test-renderer": "^18.2.0"

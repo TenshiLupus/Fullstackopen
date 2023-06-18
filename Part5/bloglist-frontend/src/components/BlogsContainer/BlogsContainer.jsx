@@ -24,7 +24,7 @@ const BlogsContainer = ({ blogs, setBlogs, user, setUser, createBlog, blogFormRe
 		{console.log(user)}
 		<h2>blogs</h2>
 		<br/>
-		<p>{user.name} Logged in <LogoutButton setUser={setUser}/> </p>
+		<p><span className="user-name">{user.username}</span> Logged in <LogoutButton setUser={setUser}/> </p>
 
 		<Togglable buttonLabel="Create new blog" ref={blogFormRef}>
 			<p>Create new</p>

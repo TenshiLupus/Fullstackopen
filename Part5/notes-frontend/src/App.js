@@ -19,10 +19,8 @@ const Footer = () => {
 	}
 	return (
 		<div style={footerStyle}>
-			<br />
-			<em>
-        Note app, Department of Computer Science, University of Helsinki 2022
-			</em>
+			<br/>
+			<em><p>Note app, Department of Computer Science, University of Helsinki 2023</p></em>
 		</div>
 	)
 }
@@ -63,7 +61,7 @@ const App = () => {
 	const loginForm = () => {
 		return (
 			<div>
-				<Togglable buttonLabel="login">
+				<Togglable buttonLabel="log in">
 					<LoginForm
 						username={username}
 						password={password}
@@ -79,7 +77,7 @@ const App = () => {
 	const noteFormRef = useRef()
 
 	const noteForm = () => (
-		<Togglable buttonLabel="New note" ref={noteFormRef}>
+		<Togglable buttonLabel="new note" ref={noteFormRef}>
 			<NoteForm createNote={addNote}></NoteForm>
 		</Togglable>
 	)

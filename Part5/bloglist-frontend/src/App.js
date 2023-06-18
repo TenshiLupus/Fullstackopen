@@ -44,6 +44,9 @@ const App = () => {
 		}
 	}, [])
 
+	const loginFormRef = useRef()
+	const blogFormRef = useRef()
+
 	const createNotification = (message, messageType) => {
 		setNotificationMessage(message)
 		setNoticationType(messageType)
@@ -58,12 +61,8 @@ const App = () => {
 			blogFormRef.current.toggleVisibility()
 			//Heuristic solution to passing user name for the blog to render, consider refactoring
 			const createdBlog = await blogService.create(blogObject)
-			const createdBlogWithUser = {
-				...createdBlog,
-				user,
-			}
 
-			const updatedBlogs = blogs.concat(createdBlogWithUser)
+			const updatedBlogs = blogs.concat({ ...createdBlog, user: user.username })
 			console.log("UPDATED BLOGS AFTER CREATION: ", updatedBlogs)
 			setBlogs(updatedBlogs)
 			createNotification(
@@ -106,9 +105,6 @@ const App = () => {
 		console.log("logging in with", username, password)
 	}
 
-	const loginFormRef = useRef()
-	const blogFormRef = useRef()
-
 	const loginForm = () => {
 		return (
 			<Togglable buttonLabel="Log in" ref={loginFormRef}>
@@ -125,7 +121,7 @@ const App = () => {
 
 	return (
 		<div>
-			<h1>Notes</h1>
+			<h1>Blogs</h1>
 			<Notification
 				message={notificationMessage}
 				notificationType={notificationType}
