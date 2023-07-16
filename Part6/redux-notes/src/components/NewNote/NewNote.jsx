@@ -1,5 +1,5 @@
-import {useDIspatch, useDispatch} from "react-redux"
-import {createNote} from "../reducers/noteReducer"
+import {useDispatch} from "react-redux"
+import {createNote} from "../../reducers/noteReducer"
 
 const NewNote = () => {
     const dispatch = useDispatch()
