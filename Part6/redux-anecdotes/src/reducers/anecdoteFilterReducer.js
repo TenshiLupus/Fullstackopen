@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+
 const anecdoteFilterSlice = createSlice({
     name: "anecdotesFilter",
     initialState: "ALL",
     reducers: {
+        //The keys in the object will be used to generate action type constants
         filterAnecdotes (state = "ALL", action) {
             return action.payload !== "ALL" ? action.payload : state
         }
@@ -27,5 +29,6 @@ const anecdoteFilterSlice = createSlice({
 //     }
 // }
 
+//Reduxtoolkit automatically generates the reducers and actions that correspond to the reducer
 export const {filterAnecdotes} = anecdoteFilterSlice.actions
 export default anecdoteFilterSlice.reducer

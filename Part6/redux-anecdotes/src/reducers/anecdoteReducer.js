@@ -20,20 +20,21 @@ const asObject = (anecdote) => {
 }
 
 const initialState = anecdotesAtStart.map(asObject)
+console.log(initialState)
 
 //Expect object formatting to be done outside of this module, the reducer should only handle already formatted data.
-const anecdoteSlice = createSlice({
-  name: "anecdotesSlice",
+const anecdotesSlice = createSlice({
+  name: "anecdotes",
   initialState,
   reducers: {
     vote(state, action) {
-      const id = action.payload.id
+      const id = action.payload
       const anecdoteToVote = state.find(an => an.id === id)
       const changedAnecdote = {...anecdoteToVote, votes: anecdoteToVote.votes + 1}
       return state.map(anecdote => anecdote.id !== id ? anecdote : changedAnecdote)
     },
-    newAnecdote(state, action){
-      const newAnecdote = action.payload
+    createAnecdote(state, action){
+      const newAnecdote = asObject(action.payload)
       state.push(newAnecdote)
     }
   }
@@ -57,22 +58,23 @@ const anecdoteSlice = createSlice({
 //   }
 // }
 
-export const vote = (id) => {
-  return {
-    type: "Vote",
-    payload: {id}
-  }
-}
+// export const vote = (id) => {
+//   return {
+//     type: "Vote",
+//     payload: {id}
+//   }
+// }
 
-export const createAnecdote = (content) => {
-  return {
-    type: "NewAnecdote",
-    payload: {
-      content,
-      id: getId(),
-      votes: 0
-    }
-  }
-}
+// export const createAnecdote = (content) => {
+//   return {
+//     type: "NewAnecdote",
+//     payload: {
+//       content,
+//       id: getId(),
+//       votes: 0
+//     }
+//   }
+// }
 
-export default anecdoteReducer
+export const {vote, createAnecdote} = anecdotesSlice.actions
+export default anecdotesSlice.reducer
