@@ -20,6 +20,7 @@ const Anecdotes = () => {
       <h2>Anecdotes</h2>
       {anecdotes.sort((a,b) => b.votes - a.votes).map(anecdote =>
         <div key={anecdote.id}>
+          {console.log("Whiting list iteration", anecdotes)}
           <div>
             {anecdote.content}
           </div>

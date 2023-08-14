@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit';
 import App from './App';
-import noteReducer from "./reducers/noteReducer.js"
 import filterReducer from "./reducers/filterReducer"
-
+import noteService from "./services/notes"
+import noteReducer, {setNotes} from "./reducers/noteReducer"
 
 // const reducer = combineReducers({
 //   notes: noteReducer,
@@ -19,6 +19,16 @@ const store = configureStore({
     filter: filterReducer
   }
 })
+
+(async () => {
+  const notes = await noteService.getAll()
+  store.dispatch(setNotes(notes))
+})()
+
+// (async () => {
+//   const notes = await noteService.getAll()
+//   notes.forEach(note => store.dispatch(appendNote(note)))
+// })()
 
 
 // const store = createStore(reducer)
