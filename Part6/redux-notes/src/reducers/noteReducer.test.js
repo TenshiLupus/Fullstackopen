@@ -1,5 +1,6 @@
 import noteReducer from './noteReducer'
 import deepFreeze from 'deep-freeze'
+import notes from '../services/notes'
 
 describe('noteReducer', () => {
   test('returns new state with action notes/createNote', () => {

@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
+import noteService from "../services/notes"
 
-const initialState = [
-  {
-    content: 'reducer defines how redux store works',
-    important: true,
-    id: 1,
-  },
-  {
-    content: 'state of store can contain any data',
-    important: false,
-    id: 2,
-  },
-]
+
+// const initialState = [
+//   {
+//     content: 'reducer defines how redux store works',
+//     important: true,
+//     id: 1,
+//   },
+//   {
+//     content: 'state of store can contain any data',
+//     important: false,
+//     id: 2,
+//   },
+// ]
 
 //By default the state will be predefined array. The actions will replace the object state along the way.
 // const noteReducer = (state = initialState, action) => {
@@ -30,18 +32,13 @@ const initialState = [
 
 //Actions are returned in form of objects
 
-const generateId = () => Number((Math.random() * 1000000).toFixed(0))
+// const generateId = () => Number((Math.random() * 1000000).toFixed(0))
 
 //Alltough it may look that we are mutating state, The Immer library creates a new state behind the lines. Hence state remains unmutated
 const noteSlice = createSlice({
   name: "notes", 
   initialState: [],
   reducers: {
-    createNote(state, action) {
-      const content = action.payload
-      
-      state.push({content})
-    },
     toggleImportanceOf(state, action) {
       const id = action.payload
 
@@ -50,8 +47,6 @@ const noteSlice = createSlice({
         ...noteToChange, 
         important: !noteToChange.important
       }
-
-      console.log(JSON.parse(JSON.stringify(state)))
 
       return state.map(note => 
         note.id !== id ? note : changedNote
@@ -66,6 +61,22 @@ const noteSlice = createSlice({
   },
 })
 
-export const { createNote, toggleImportanceOf, appendNote, setNotes} = noteSlice.actions
+export const initializeNotes = () => {
+  
+  const setStateNotes = async dispatch => {
+    const retrievedNotes = await noteService.getAll()
+    dispatch(setNotes(retrievedNotes))
+  }
+  return setStateNotes
+}
+
+export const createNote = content => {
+  return async dispatch => {
+    const newNote = await noteService.createNew(content)
+    dispatch(appendNote(newNote))
+  }
+}
+
+export  const { toggleImportanceOf, appendNote, setNotes} = noteSlice.actions
 
 export default noteSlice.reducer
