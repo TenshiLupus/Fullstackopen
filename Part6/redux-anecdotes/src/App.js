@@ -1,29 +1,25 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-
+// import { useEffect} from 'react'
+// import { useDispatch } from 'react-redux'
 import Anecdotes from './components/Anecdotes/Anecdotes'
 import AnecdoteForm from './components/AnecdoteForm/AnecdoteForm'
-import AnecdoteFilter from './components/AnecdoteFilter/AnecdoteFilter'
+// import AnecdoteFilter from './components/AnecdoteFilter/AnecdoteFilter'
 import Notification from './components/Notification/Notification'
 
-import {initializeAnecdotes} from "./reducers/anecdoteReducer"
+// import {initializeAnecdotes} from "./reducers/anecdoteReducer"
+
+// import notificationReducer from './reducers/notificationReducer'
 
 const App = () => {
 
-  const dispatch = useDispatch()
-  useEffect(() => {
-    // (async () => {dispatch(setAnecdotes(await anecdotesService.getAll()))})();
-    dispatch(initializeAnecdotes())
-  },[dispatch])
+ 
 
   return (
-    <div>
-      <Notification/>
-      <AnecdoteFilter/>
-      <Anecdotes/>     
-      <AnecdoteForm/>
-    </div>
+      <div>
+        <Notification/>
+        {/* <AnecdoteFilter/> */}
+        <Anecdotes/>     
+        <AnecdoteForm/>
+      </div>
   )
-}
-
+  }
 export default App

@@ -18,16 +18,15 @@ const getAll = async () => {
     return response.data
 }
 
-const createNewAnecdote = async (content) => {
-    console.log("Content to save", content)
-    const objectToSave = asObject(content)
-    const response = await axios.post(baseUrl, objectToSave)
+const createNewAnecdote = async (anecdote) => {
+    console.log("Content to save", anecdote)
+    const response = await axios.post(baseUrl, anecdote)
     return response.data
 }
 
-const updateAnecdote = async (id, content) => {
+const updateAnecdote = async (anecdote) => {
    console.log("Updating anecdote");
-   const response = await axios.put(`${baseUrl}/${id}`, content)
+   const response = await axios.put(`${baseUrl}/${anecdote.id}`, anecdote)
 }
 
 const anecdotesService = { getAll, createNewAnecdote, updateAnecdote}
