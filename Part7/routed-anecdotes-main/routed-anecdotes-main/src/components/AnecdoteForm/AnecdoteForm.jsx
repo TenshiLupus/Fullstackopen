@@ -1,19 +1,23 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const AnecdoteForm = (props) => {
+const AnecdoteForm = ({addNew, notifyUser}) => {
     const [content, setContent] = useState('')
     const [author, setAuthor] = useState('')
     const [info, setInfo] = useState('')
+    const navigate = useNavigate()
   
   
     const handleSubmit = (e) => {
       e.preventDefault()
-      props.addNew({
+      addNew({
         content,
         author,
         info,
         votes: 0
       })
+      notifyUser(`A new anecdote ${content} created`)
+      navigate("/")
     }
   
     return (

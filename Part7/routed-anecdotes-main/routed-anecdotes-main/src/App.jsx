@@ -1,5 +1,5 @@
 
-import {BrowserRouter as Router, Routes, Route, useMatch} from 'react-router-dom'
+import {Routes, Route, useMatch} from 'react-router-dom'
 
 import { useState } from 'react'
 
@@ -10,6 +10,7 @@ import Footer from './components/Footer/Footer'
 import Anecdotes from './components/Anecdotes/Anecdotes'
 import Anecdote from './components/Anecdote/Anecdote'
 import AnecdoteForm from './components/AnecdoteForm/AnecdoteForm'
+import Notification from './components/Notification/Notification'
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -30,13 +31,14 @@ const App = () => {
   ])
 
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState("")
   
   // const [notification, setNotification] = useState('')
 
-  // const addNew = (anecdote) => {
-  //   anecdote.id = Math.round(Math.random() * 10000)
-  //   setAnecdotes(anecdotes.concat(anecdote))
-  // }
+  const addNew = (anecdote) => {
+    anecdote.id = Math.round(Math.random() * 10000)
+    setAnecdotes(anecdotes.concat(anecdote))
+  }
 
   // const anecdoteById = (id) =>
   //   anecdotes.find(a => a.id === id)
@@ -52,16 +54,23 @@ const App = () => {
   //   setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   // }
 
+  const notifyUser = (message) => {
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000)
+  }
+
   const match = useMatch("/anecdotes/:id")
   const anecdote = match ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id)) : null
   return (
     <>
     <Menu user={user} setUser={() => setUser}/>
+    <Notification message={message}/>
     <Routes>
         <Route path="about" element={<About/>}/>
         <Route path="/" element={<Anecdotes anecdotes={anecdotes} setAnecdotes={() => setAnecdotes}/>}/>
-        <Route path="/create" element={<AnecdoteForm setAnecdotes={setAnecdotes}/>}/>
-        <Route path="/anecdotes" element={<Anecdotes anecdotes={anecdotes} setAnecdotes={() => setAnecdotes}/>}/>
+        <Route path="/create" element={<AnecdoteForm addNew={addNew} notifyUser={notifyUser}/>}/>
         <Route path="/anecdotes/:id" element={<Anecdote anecdote={anecdote}/>}/>
     </Routes>
     <Footer />
