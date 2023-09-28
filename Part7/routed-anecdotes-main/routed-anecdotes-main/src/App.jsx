@@ -69,7 +69,7 @@ const App = () => {
     <Notification message={message}/>
     <Routes>
         <Route path="about" element={<About/>}/>
-        <Route path="/" element={<Anecdotes anecdotes={anecdotes} setAnecdotes={() => setAnecdotes}/>}/>
+        <Route path="/" element={<Anecdotes anecdotes={anecdotes}/>}/>
         <Route path="/create" element={<AnecdoteForm addNew={addNew} notifyUser={notifyUser}/>}/>
         <Route path="/anecdotes/:id" element={<Anecdote anecdote={anecdote}/>}/>
     </Routes>

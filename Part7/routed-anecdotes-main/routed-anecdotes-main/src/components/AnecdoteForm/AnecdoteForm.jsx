@@ -1,22 +1,34 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-const AnecdoteForm = ({addNew, notifyUser}) => {
-    const [content, setContent] = useState('')
-    const [author, setAuthor] = useState('')
-    const [info, setInfo] = useState('')
+import {useField} from "./../../hooks/AnecdoteForm"
+
+const AnecdoteForm = ({addNew, notifyUser}) => {  
+   
+    // const [content, setContent] = useState('')
+    // const [author, setAuthor] = useState('')
+    // const [info, setInfo] = useState('')
+
+    const {contentReset, ...content} = useField("text")                   
+    const {authorReset, ...author} = useField("text")
+    const {infoReset, ...info} = useField("text")
     const navigate = useNavigate()
   
-  
+    const resetFields = () => {
+      contentReset()
+      authorReset()
+      infoReset()
+    }
+
     const handleSubmit = (e) => {
       e.preventDefault()
       addNew({
-        content,
-        author,
-        info,
+        content: content.value,
+        author: author.value,
+        info: info.value,
         votes: 0
       })
-      notifyUser(`A new anecdote ${content} created`)
+      notifyUser(`A new anecdote ${content.value} created`)
       navigate("/")
     }
   
@@ -30,20 +42,21 @@ const AnecdoteForm = ({addNew, notifyUser}) => {
           
           <div>
             content
-            <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+            <input {...content}/>
           </div>
           
           <div>
             author
-            <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+            <input {...author}/>
           </div>
           
           <div>
             url for more info
-            <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+            <input {...info}/>
           </div>
           
-          <button>create</button>
+          <button type="submit">create</button>
+          <button type="button" onClick={resetFields}>reset</button>
         
         </form>
   
